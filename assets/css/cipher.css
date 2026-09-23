@@ -1,0 +1,75 @@
+/* Contact — "Solve Your Growth Cipher" puzzle form */
+.sr-only{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.cipher-wrap{display:grid;grid-template-columns:.8fr 1.2fr;gap:clamp(30px,5vw,64px);align-items:start}
+@media (max-width:900px){.cipher-wrap{grid-template-columns:1fr}.cipher-wrap aside{order:2}}
+.cipher{padding:clamp(22px,3.4vw,40px);border-color:var(--line-strong)}
+.cipher-head{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:20px;padding-bottom:26px;margin-bottom:26px;border-bottom:1px solid var(--line)}
+.dials{display:flex;gap:10px}
+.dial{
+  width:58px;height:74px;border-radius:30px 30px 8px 8px;position:relative;display:grid;place-items:center;overflow:hidden;
+  background:linear-gradient(180deg,#050505,#1c1c1c 50%,#050505);
+  border:2px solid transparent;
+  background-clip:padding-box;
+  box-shadow:0 0 0 2px #8b0d12,inset 0 8px 14px rgba(0,0,0,.8),inset 0 -8px 14px rgba(0,0,0,.8);
+}
+.dial::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(255,255,255,.03) 0 2px,transparent 2px 6px)}
+.dial span{position:relative;font:400 2.6rem/1 var(--f-crt);color:var(--ink-3);transition:color .3s,text-shadow .3s}
+.dial.spin span{animation:dialSpin .55s steps(8) 1}
+.dial.solved{box-shadow:0 0 0 2px var(--green),0 0 18px rgba(255,59,59,.35),inset 0 8px 14px rgba(0,0,0,.8),inset 0 -8px 14px rgba(0,0,0,.8)}
+.dial.solved span{color:var(--green);text-shadow:0 0 10px var(--green)}
+.dial.current{box-shadow:0 0 0 2px var(--cyan),0 0 18px rgba(229,9,20,.3),inset 0 8px 14px rgba(0,0,0,.8),inset 0 -8px 14px rgba(0,0,0,.8)}
+@keyframes dialSpin{0%{transform:translateY(-60%);filter:blur(2px)}100%{transform:none;filter:none}}
+@media (max-width:420px){.dial{width:48px;height:62px}.dial span{font-size:2rem}}
+.cipher-meta{flex:1;min-width:160px;text-align:right}
+.cipher-meta .mono{font-size:.72rem;letter-spacing:.22em;color:var(--cyan)}
+.cipher-bar{height:4px;border-radius:4px;background:rgba(255,255,255,.06);margin-top:10px;overflow:hidden}
+.cipher-bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--brass-3),var(--cyan));box-shadow:0 0 10px var(--cyan);transition:width .5s}
+
+.lock{border:0;margin:0;padding:0;min-width:0;animation:lockIn .45s ease}
+.lock[hidden]{display:none}
+@keyframes lockIn{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:none}}
+.lock legend{font:700 clamp(1.3rem,2.4vw,1.75rem)/1.2 var(--f-display);letter-spacing:.03em;padding:0;margin-bottom:6px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.lock-no{font:700 .68rem/1 var(--f-mono);letter-spacing:.22em;text-transform:uppercase;color:#ffffff;background:var(--brass-grad);padding:6px 9px;border-radius:5px}
+.hint{font-size:.95rem;margin-bottom:22px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media (max-width:560px){.row2{grid-template-columns:1fr}}
+.field{margin-bottom:16px}
+.field > label{display:block;font:600 .7rem/1.3 var(--f-mono);letter-spacing:.16em;text-transform:uppercase;color:var(--ink-2);margin-bottom:8px}
+.field input:not([type=range]),.field select,.field textarea{
+  width:100%;padding:14px 16px;border-radius:3px;font:500 1rem/1.4 var(--f-mono);color:var(--ink);
+  background:#0d0d0d;border:1px solid rgba(229,9,20,.25);outline:none;transition:border-color .2s,box-shadow .2s;
+  box-shadow:inset 0 2px 6px rgba(0,0,0,.6);
+}
+.field select{appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--brass-2) 50%),linear-gradient(135deg,var(--brass-2) 50%,transparent 50%);background-position:calc(100% - 20px) 50%,calc(100% - 14px) 50%;background-size:6px 6px;background-repeat:no-repeat}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--cyan);box-shadow:inset 0 2px 6px rgba(0,0,0,.6),0 0 0 3px rgba(229,9,20,.15)}
+.field .invalid,.field input.invalid{border-color:var(--red)!important;box-shadow:0 0 0 3px rgba(255,90,78,.15)!important}
+.seg{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.seg-wrap{grid-template-columns:repeat(2,1fr)}
+@media (max-width:560px){.seg{grid-template-columns:repeat(2,1fr)}}
+.seg label,.chip{position:relative;cursor:pointer}
+.seg input,.chip input{position:absolute;opacity:0;inset:0;cursor:pointer}
+.seg span,.chip span{
+  display:flex;align-items:center;justify-content:center;gap:8px;text-align:center;min-height:48px;padding:10px 12px;border-radius:3px;
+  font:600 .8rem/1.2 var(--f-mono);letter-spacing:.06em;color:var(--ink-2);
+  background:#0d0d0d;border:1px solid rgba(229,9,20,.22);transition:all .2s;
+}
+.seg input:checked + span,.chip input:checked + span{color:#ffffff;background:var(--cyan);border-color:var(--cyan);box-shadow:0 0 18px rgba(229,9,20,.35)}
+.seg input:focus-visible + span,.chip input:focus-visible + span{outline:2px solid var(--cyan);outline-offset:2px}
+.chips{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px}
+.chip span{justify-content:flex-start}
+.chip svg{width:18px;height:18px;flex-shrink:0}
+.brass-range{width:100%;-webkit-appearance:none;appearance:none;height:8px;border-radius:8px;background:linear-gradient(90deg,var(--cyan) var(--p,10%),rgba(255,255,255,.08) var(--p,10%));outline:none}
+.brass-range::-webkit-slider-thumb{-webkit-appearance:none;width:26px;height:26px;border-radius:50%;background:conic-gradient(#5a0000,#ff8a8a,#c1121c,#5a0000,#e50914,#5a0000);box-shadow:0 2px 8px rgba(0,0,0,.6);cursor:grab;border:2px solid #0a0a0a}
+.brass-range::-moz-range-thumb{width:24px;height:24px;border-radius:50%;background:#e50914;border:2px solid #0a0a0a;cursor:grab}
+.consent{display:flex;gap:12px;align-items:flex-start;font-size:.9rem;color:var(--ink-2);margin-top:8px;cursor:pointer}
+.consent input{width:20px;height:20px;accent-color:var(--cyan);margin-top:2px;flex-shrink:0}
+.consent a{color:var(--cyan);text-decoration:underline}
+.consent.invalid{color:var(--red)}
+.err{min-height:1.4em;color:var(--red);font:600 .82rem/1.4 var(--f-mono);margin:10px 0 0}
+.cipher-nav{display:flex;justify-content:space-between;gap:12px;margin-top:14px;flex-wrap:wrap}
+.cipher-nav [data-next]{margin-left:auto}
+.cipher.shake{animation:shake .4s}
+@keyframes shake{20%,60%{transform:translateX(-8px)}40%,80%{transform:translateX(8px)}}
+.granted{animation:lockIn .6s ease}
+.granted .terminal pre{font-size:.95rem}
+@media (prefers-reduced-motion:reduce){.lock,.granted,.dial.spin span,.cipher.shake{animation:none}}
