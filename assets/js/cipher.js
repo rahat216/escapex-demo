@@ -6,18 +6,41 @@
   'use strict';
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  // Title decode effect
+  // Title decode (glitch) effect — every character keeps the exact width of its final
+  // glyph while scrambling, so the line never grows, wraps or jumps.
   document.querySelectorAll('[data-scramble]').forEach(function (el) {
     if (reduce) return;
     var final = el.textContent, glyphs = 'ABCDEFGHJKLMNPQRSTUVWXYZ0123456789#%&@', frame = 0;
-    var t = setInterval(function () {
-      frame++;
-      el.textContent = final.split('').map(function (ch, i) {
-        if (ch === ' ') return ' ';
-        return i < frame / 3 ? ch : glyphs[Math.floor(Math.random() * glyphs.length)];
-      }).join('');
-      if (frame / 3 > final.length) { clearInterval(t); el.textContent = final; }
-    }, 40);
+    el.textContent = '';
+    var cells = final.split('').map(function (ch) {
+      var s = document.createElement('span');
+      s.textContent = ch;
+      s.style.display = 'inline-block';
+      s.style.whiteSpace = 'pre';
+      el.appendChild(s);
+      return s;
+    });
+    var start = function () {
+      cells.forEach(function (s) {        // lock each cell to its real width
+        s.style.width = s.getBoundingClientRect().width + 'px';
+        s.style.textAlign = 'center';
+        s.style.overflow = 'hidden';
+        s.style.verticalAlign = 'bottom';
+      });
+      var t = setInterval(function () {
+        frame++;
+        cells.forEach(function (s, i) {
+          var ch = final[i];
+          s.textContent = (ch === ' ' || i < frame / 3) ? ch : glyphs[Math.floor(Math.random() * glyphs.length)];
+        });
+        if (frame / 3 > final.length) {  // done: back to plain text
+          clearInterval(t);
+          el.textContent = final;
+        }
+      }, 40);
+    };
+    // wait for the web font so the measured widths are the final ones
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(start); else start();
   });
 
   var form = document.getElementById('cipher');
