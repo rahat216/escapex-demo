@@ -73,3 +73,6 @@
 .granted{animation:lockIn .6s ease}
 .granted .terminal pre{font-size:.95rem}
 @media (prefers-reduced-motion:reduce){.lock,.granted,.dial.spin span,.cipher.shake{animation:none}}
+
+/* keep "Growth Cipher" on one line while the glitch runs */
+[data-scramble]{white-space:nowrap;display:inline-block;max-width:100%}
